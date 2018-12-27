@@ -70,15 +70,21 @@ def getFirstLine(doc):
     return ''
 
 
+def createEnvironment():
+    env = Environment()
+    # some targets are needed by some modules, even if we are
+    # not going to install them
+    for t in ['pip', 'python', 'numpy', 'scipy', 'fftw3']:
+        env.addTarget(t)
+
+    return env
+
+
 def checkPlugins():
     """ Discover all plugins and print some info.
     """
     plugins = Domain.getPlugins()
-    env = Environment()
-    # pip and python are needed by Xmipp plugin
-    env.addTarget('pip')
-    env.addTarget('python')
-
+    env = createEnvironment()
     print("Plugins:")
     for k, plugin in plugins.iteritems():
         print("-", plugin.__name__)
@@ -131,7 +137,7 @@ def printPluginInfo(pluginName, verbosity):
     print("Plugin name: %s, version: %s\n" % (pluginName, version))
 
     print("Plugin binaries: ")
-    env = Environment()
+    env = createEnvironment()
     plugin.Plugin.defineBinaries(env)
     print(env.printHelp())
 
@@ -190,11 +196,13 @@ def printPluginInfo(pluginName, verbosity):
 
 
 def installBinary(plugin, target):
-    env = Environment()
+    print("Inside installBinary...")
+    env = createEnvironment()
     plugin.Plugin.defineBinaries(env)
 
     if env.hasTarget(target):
-        env.executeTargets(target)
+        env._executeTargets([env.getTarget(target)])
+        # env.executeTargets(target)
     else:
         print("ERROR: Target %s not found, please provide a valid"
               "version from the ones listed below" % target)
