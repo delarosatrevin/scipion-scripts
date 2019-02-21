@@ -37,10 +37,10 @@ import argparse
 
 from pyworkflow.em import Domain
 from pyworkflow.protocol import Protocol
-from install.plugin_funcs import PluginInfo
+from pyworkflow.install.plugin_funcs import PluginInfo
 import pyworkflow.em as em
 import pyworkflow.utils as pwutils
-from install.funcs import Environment
+from pyworkflow.install.funcs import Environment
 
 
 def getSubmodule(name, subname):
@@ -74,7 +74,7 @@ def createEnvironment():
     env = Environment()
     # some targets are needed by some modules, even if we are
     # not going to install them
-    for t in ['pip', 'python', 'numpy', 'scipy', 'fftw3']:
+    for t in ['pip', 'python', 'numpy', 'scipy', 'fftw3', 'arpack']:
         env.addTarget(t)
 
     return env
