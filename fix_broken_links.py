@@ -37,14 +37,14 @@ class Main:
         if not os.path.exists(args.rawDataPath):
             raise Exception("Raw data path '%s' does not exists. " % args.rawDataPath)
 
-        broken_links = [f for f in os.listdir(args.inputPath)
-                        if os.path.islink(f) and not os.path.exists(f)]
+        broken_links = [f for f in os.listdir(args.inputPath)]
 
         dataFolderDst = os.path.join(args.inputPath, rawDataFolder)
         if args.absolute:
             dataFolderSource = os.path.abspath(rawDataPath)
         else:
-            dataFolderSource = os.path.relpath(rawDataPath, dataFolderDst)
+            dataFolderSource = os.path.relpath(os.path.realpath(rawDataPath),
+                                               os.path.realpath(dataFolderDst))
 
         print("Creating link to raw data folder...")
         print("%s -> %s" % (dataFolderDst, dataFolderSource))
