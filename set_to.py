@@ -27,6 +27,7 @@ def get_parser():
     g.add_argument('--output_text', action='store_true', help="Write all set items to a text file.")
     g.add_argument('--print', action='store_true', help="Print all set's item files to a text file.")
     g.add_argument('--copy', action='store_true', help="Copy all set's item files to a text file.")
+    g.add_argument('--check_dims', action='store_true', help='Check images dimensions')
 
     add('output', metavar='OUTPUT', help='Output file or folder.')
 
@@ -54,6 +55,20 @@ def main():
             fn = os.path.join(root, item.getFileName())
             print('Copying %s to %s' % (fn, args.output))
             pwutils.copyFile(fn, args.output)
+
+    elif args.check_dims:
+        from pwem.emlib.image import ImageHandler
+        ih = ImageHandler()
+
+        counter = {}
+
+        for item in setObj:
+            fn = os.path.join(root, item.getFileName())
+            dims = ih.getDimensions(fn)
+            counter[dims] = 1 if dims not in counter else counter[dims] + 1
+            print('%s: %s' % (os.path.basename(fn), dims))
+
+        pwutils.prettyDict(counter)
 
 
 if __name__ == "__main__":
