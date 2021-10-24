@@ -1,4 +1,12 @@
+<<<<<<< HEAD
+data
+.idea
+*pyc
+config.py
+build
+=======
 .idea
 *pyc
 install_script.sh
+>>>>>>> f3e9535e2db762b9bbd8bffb1ff5e441f3d07aec
 
